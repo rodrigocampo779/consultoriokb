@@ -1140,6 +1140,7 @@
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
   controls.enableZoom = false;
+  controls.zoomSpeed = 0.7;
 
   function resize(){
     var w = viewport.clientWidth, h = viewport.clientHeight;
@@ -1212,7 +1213,18 @@
   }
 
   var dragStart = null;
-  canvas.addEventListener('pointerdown', function(e){ dragStart = { x:e.clientX, y:e.clientY }; viewport.classList.add('dragging'); });
+  var zoomActivated = false;
+  function activateZoom(){
+    if(zoomActivated) return;
+    zoomActivated = true;
+    controls.enableZoom = true;
+    hintEl.textContent = 'Arrastrá para girar · rueda o pellizcá para zoom';
+  }
+  canvas.addEventListener('pointerdown', function(e){
+    dragStart = { x:e.clientX, y:e.clientY };
+    viewport.classList.add('dragging');
+    activateZoom();
+  });
   window.addEventListener('pointerup', function(){ viewport.classList.remove('dragging'); });
 
   canvas.addEventListener('pointermove', function(e){
